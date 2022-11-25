@@ -26,7 +26,22 @@ async function run() {
       const category = req.body;
       const result = await booksCollectionCategories.insertOne(category);
       res.send(result);
-      console.log(result);
+    });
+
+    app.get("/categories", async (req, res) => {
+      let query = {};
+      if (req.query.category) {
+        query = {
+          category: req.query.category,
+        };
+      } else if (req.query.category) {
+        query = {
+          category: req.query.category,
+        };
+      }
+      const cursor = booksCollectionCategories.find(query);
+      const categories = await cursor.toArray();
+      res.send(categories);
     });
   } finally {
   }
