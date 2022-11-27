@@ -35,14 +35,31 @@ async function run() {
         query = {
           category: req.query.category,
         };
-      } else if (req.query.category) {
-        query = {
-          category: req.query.category,
-        };
       }
       const cursor = booksCollectionCategories.find(query);
       const categories = await cursor.toArray();
       res.send(categories);
+    });
+    //http://localhost:5000/users?role=buyer
+    app.get("/users", async (req, res) => {
+      let query = {};
+      if (req.query.role) {
+        query = {
+          role: req.query.role,
+        };
+      }
+      const cursor = usersCollection.find(query);
+      const users = await cursor.toArray();
+      console.log(users);
+      res.send(users);
+    });
+
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      console.log(user);
+      const result = await usersCollection.insertOne(user);
+      console.log(result);
+      res.send(result);
     });
   } finally {
   }
