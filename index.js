@@ -4,7 +4,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -21,6 +21,7 @@ async function run() {
     const booksCollectionCategories = client
       .db("books")
       .collection("categories");
+    const usersCollection = client.db("books").collection("users");
 
     app.post("/categories", async (req, res) => {
       const category = req.body;
