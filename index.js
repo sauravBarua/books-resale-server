@@ -41,6 +41,13 @@ async function run() {
       res.send(categories);
     });
 
+    app.get("/categories/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const category = await booksCollectionCategories.findOne(query);
+      res.send(category);
+    });
+
     app.delete("/categories/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
