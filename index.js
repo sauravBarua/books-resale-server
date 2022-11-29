@@ -40,6 +40,13 @@ async function run() {
       const categories = await cursor.toArray();
       res.send(categories);
     });
+
+    app.delete("/categories/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await booksCollectionCategories.deleteOne(query);
+      res.send(result);
+    });
     //http://localhost:5000/users?role=buyer
     app.get("/users", async (req, res) => {
       let query = {};
@@ -59,6 +66,12 @@ async function run() {
       console.log(user);
       const result = await usersCollection.insertOne(user);
       console.log(result);
+      res.send(result);
+    });
+    app.delete("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await usersCollection.deleteOne(query);
       res.send(result);
     });
   } finally {
