@@ -18,10 +18,10 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    const booksCollectionCategories = client
-      .db("books")
-      .collection("categories");
+    const booksCollectionCategories = client.db("books").collection("categories");
     const usersCollection = client.db("books").collection("users");
+    const adsCollection = client.db("books").collection("ads");
+
 
     app.post("/categories", async (req, res) => {
       const category = req.body;
@@ -54,7 +54,6 @@ async function run() {
       const result = await booksCollectionCategories.deleteOne(query);
       res.send(result);
     });
-    //http://localhost:5000/users?role=buyer
     app.get("/users", async (req, res) => {
       let query = {};
       if (req.query.role) {
@@ -64,7 +63,6 @@ async function run() {
       }
       const cursor = usersCollection.find(query);
       const users = await cursor.toArray();
-      console.log(users);
       res.send(users);
     });
 
@@ -72,13 +70,19 @@ async function run() {
       const user = req.body;
       console.log(user);
       const result = await usersCollection.insertOne(user);
-      console.log(result);
       res.send(result);
     });
     app.delete("/users/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await usersCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    app.post("/ads", async (req, res) => {
+      const ad = req.body;
+      console.log(ad);
+      const result = await adsCollection.insertOne(ad);
       res.send(result);
     });
   } finally {
