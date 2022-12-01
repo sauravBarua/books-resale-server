@@ -18,10 +18,11 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    const booksCollectionCategories = client.db("books").collection("categories");
+    const booksCollectionCategories = client
+      .db("books")
+      .collection("categories");
     const usersCollection = client.db("books").collection("users");
     const adsCollection = client.db("books").collection("ads");
-
 
     app.post("/categories", async (req, res) => {
       const category = req.body;
@@ -81,9 +82,20 @@ async function run() {
 
     app.post("/ads", async (req, res) => {
       const ad = req.body;
-      console.log(ad);
       const result = await adsCollection.insertOne(ad);
       res.send(result);
+    });
+
+    app.get("/ads", async (req, res) => {
+      let query = {};
+      if (req.query.ad) {
+        query = {
+          ad: req.query.ad,
+        };
+      }
+      const cursor = booksCollectionCategories.find(query);
+      const ads = await cursor.toArray();
+      res.send(ads);
     });
   } finally {
   }
